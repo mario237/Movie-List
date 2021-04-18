@@ -23,7 +23,7 @@ function displayMovies(){
     for(let i=0 ; i<moviesList.length ; i++){
         movieItem += ` <div class="col-md-3 my-3">
         <div class="movie position-relative">
-        <img class="w-100" src="https://www.themoviedb.org/t/p/w500${moviesList[i].poster_path}" alt="">
+        <img class="w-100" src="https://www.themoviedb.org/t/p/w500${moviesList[i].poster_path}" alt="${moviesList[i].title} image">
         <h3>${moviesList[i].title}</h3>    
         <p>${moviesList[i].overview}</p>
         <div class="vote position-absolute py-2 font-weight-bolder">

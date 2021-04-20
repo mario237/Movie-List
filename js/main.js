@@ -4,36 +4,36 @@ var moviesList = [];
 
 var url = "https://api.themoviedb.org/3/trending/all/day?api_key=c657287b055c076418bfc63c59f64465";
 
-myHttp.open("GET" , url);
+myHttp.open("GET", url);
 
 myHttp.send();
 
 
-myHttp.addEventListener("readystatechange" , ()=>{
-    if(myHttp.readyState == 4 && myHttp.status == 200){
+myHttp.addEventListener("readystatechange", () => {
+    if (myHttp.readyState == 4 && myHttp.status == 200) {
         moviesList = JSON.parse(myHttp.response).results;
-        displayMovies();
+        displayMovies(moviesList);
     }
 });
 
-function displayMovies(){
-    
-    var movieItem =``;
+function displayMovies(array) {
 
-    for(let i=0 ; i<moviesList.length ; i++){
+    var movieItem = ``;
 
-        if(moviesList[i].title == undefined){
-            moviesList[i].title = moviesList[i].name
+    for (let i = 0; i < array.length; i++) {
+
+        if (array[i].title == undefined) {
+            array[i].title = array[i].name
         }
         movieItem += ` <div class="col-md-3 my-3">
         <div class="movie position-relative">
-        <img class="w-100" src="https://www.themoviedb.org/t/p/w500${moviesList[i].poster_path}" alt="${moviesList[i].title} image">
-        <h3>${moviesList[i].title}</h3>    
-        <p>${moviesList[i].overview}</p>
+        <img class="w-100" src="https://www.themoviedb.org/t/p/w500${array[i].poster_path}" alt="${array[i].title} image">
+        <h3>${array[i].title}</h3>    
+        <p>${array[i].overview}</p>
         <div class="vote position-absolute py-2 font-weight-bolder">
                             <i class="fas fa-star">
                             </i>
-                            <span class="vote-num">${moviesList[i].vote_average}</span>
+                            <span class="vote-num">${array[i].vote_average}</span>
                         </div>
         </div>
     </div>`
@@ -56,17 +56,48 @@ function showScrollToTop() {
 }
 
 
-$(".scroll-to-top").click(function() {
+$(".scroll-to-top").click(function () {
     $('html, body').animate({
         scrollTop: 0
     }, 2000);
-  });
+});
+
+var movieSearchInput = document.getElementById('movieSearchInput');
+
+var searchList = [];
+
+movieSearchInput.addEventListener('keyup', getMovie)
+
+function getMovie() {
+
+    let searchText = movieSearchInput.value;
+
+    var searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=c657287b055c076418bfc63c59f64465&query=${searchText}`;
+
+
+    if (searchText != '') {
+        var myHttp2 = new XMLHttpRequest();
 
 
 
-// scrollBtn.addEventListener('click' , ()=>{
-//     window.scrollTo({
-//         top: 0,
-//         behavior: "smooth"
-//     })
-// })
+        myHttp2.open("GET", searchUrl);
+
+        myHttp2.send();
+
+
+        myHttp2.addEventListener("readystatechange", () => {
+            if (myHttp2.readyState == 4 && myHttp2.status == 200) {
+               searchList = JSON.parse(myHttp2.response).results;
+               displayMovies(searchList);
+            }
+        });
+    }else{
+        displayMovies(moviesList)
+    }
+}
+
+
+
+
+
+
